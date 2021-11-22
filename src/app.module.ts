@@ -1,10 +1,28 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { PasswordModule } from './password/password.module';
+import { configValidationSchema } from './config/config.schema';
+import { LoggerModule } from './logger/logger.module';
+import { HttpLoggerMiddleware } from './middlewares/http-logger.middleware';
+import { DatabaseModule } from './db/database.module';
+import { SessionModule } from './session/session.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: [`.env.stage.local`],
+      validationSchema: configValidationSchema,
+    }),
+    LoggerModule,
+    DatabaseModule,
+    PasswordModule,
+    SessionModule,
+  ],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(HttpLoggerMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}
