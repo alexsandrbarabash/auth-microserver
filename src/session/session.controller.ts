@@ -7,6 +7,6 @@ export class SessionController {
   @UseGuards(AuthGuard('jwt'))
   @Post()
   checkSession(@GetUser() user): any {
-    return { user, log: 'ad' };
+    return { user: 'lox', log: 'ad' };
   }
 }
