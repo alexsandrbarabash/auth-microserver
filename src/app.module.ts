@@ -10,7 +10,7 @@ import { SessionModule } from './session/session.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: [`.env.stage.local`],
+      envFilePath: ['.env'],
       validationSchema: configValidationSchema,
     }),
     LoggerModule,
