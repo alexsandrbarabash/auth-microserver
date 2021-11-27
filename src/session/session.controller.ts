@@ -8,6 +8,6 @@ export class SessionController {
   @UseGuards(AuthGuard('jwt'))
   @Post()
   checkSession(@GetUser() user): JwtPayload {
-    return user;
+    return {user, log: 'ad'};
   }
 }
